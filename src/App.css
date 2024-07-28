@@ -93,8 +93,8 @@ width: 100%;
   justify-content: center;
 }
 .timecodesBtn{
-  background: var(--tg-theme-button-color);
+  background: #1b85db;
 }
 .summaryBtn{
-  background: var(--tg-theme-button-color);
+  background: #35434b;
 }
