@@ -8,10 +8,11 @@
   display: flex;
   max-width: 420px;
   width: 100%;
-  justify-content: center;
   flex-direction: column;
   padding: 12px;
   margin: 0 auto;
+  position: relative;
+  height: 100vh;
 }
 .App h1{
   font-size: 1.5rem;
@@ -91,10 +92,46 @@ width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  text-align: center;
 }
 .timecodesBtn{
   background: #1b85db;
+ 
 }
 .summaryBtn{
   background: #35434b;
+}
+
+/* Модалки */
+
+.modalContainer{
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top:0;
+  left: 0;
+  transform: translateY(120%);
+ 
+  transition: transform 0.3s, opacity 0.3s;
+  z-index: 100;
+
+
+}
+.modalContainer--open{
+  opacity: 1;
+  transform: translateY(0);
+}
+.timecodesContainer{
+  display: flex;
+  max-width: 420px;
+  width: 100%;
+  flex-direction: column;
+  padding: 12px;
+  margin: 0 auto;
+  position: relative;
+  height: 100vh;
+  border-radius: 16px 16px 0 0;
+  background: #fff;
+  box-shadow: 0 0 10px #00000038;
 }

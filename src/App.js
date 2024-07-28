@@ -1,6 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { CSSTransition } from "react-transition-group";
 
 const tg = window.Telegram.WebApp;
 
@@ -10,40 +11,86 @@ function App() {
 
   const [isTimecodesModal, setIsTimecodesModal] = useState(false);
 
+  const [currentVideoTimecodesId, setCurrentVideoTimecodesId] = useState(0);
+
+  const nodeRef = useRef(null);
+
   useEffect(() => {
     setData(returnMock());
   }, []);
 
+  console.log(isTimecodesModal);
+
+  const handleOpenTimecodesModal = (e) => {
+    e.stopPropagation();
+    setIsTimecodesModal(true);
+  };
+
+  const handleCloseTimecodesModal = (e) => {
+    console.log("click");
+    e.stopPropagation();
+    setIsTimecodesModal(false);
+  };
+
+  const handleOpenSummaryModal = (e) => {
+    e.stopPropagation();
+    setIsSummaryModal(true);
+  };
+
   if (!data) {
     return <div>Пусто...</div>;
   }
-  return (
-    <div className="App">
-      <h1>Ваши сохраненные видео</h1>
-      <div className="cards">
-        {data.map(({ posterUrl, title, name, id }, i) => (
-          <a href={`http://www.youtube.com/watch?v=${id}`}>
-            <div className="card">
-              <div className="poster">
-                <img src={posterUrl} alt="poster" />
-              </div>
 
+  // Добавить лоадер
+  return (
+    <>
+      <div className="App">
+        <h1>Ваши сохраненные видео</h1>
+        <div className="cards">
+          {data.map(({ posterUrl, title, name, id }, i) => (
+            <div className="card">
+              <a
+                href={`http://www.youtube.com/watch?v=${id}`}
+                className="poster"
+              >
+                <img src={posterUrl} alt="poster" />
+              </a>
               <div className="content">
                 <div className="titles">
                   <h2 className="title">{title}</h2>
                   <p className="sub_title">{name}</p>
                 </div>
                 <div className="buttons">
-                  <div className="timecodesBtn">Ваши заметки</div>
-                  <div className="summaryBtn">Краткое содержание</div>
+                  <div
+                    className="timecodesBtn"
+                    onClick={handleOpenTimecodesModal}
+                  >
+                    Ваши заметки
+                  </div>
+                  <div className="summaryBtn" onClick={handleOpenSummaryModal}>
+                    Краткое содержание
+                  </div>
                 </div>
               </div>
               <div className="controls"></div>
             </div>
-          </a>
-        ))}
+          ))}
+        </div>
+
+        <div
+          className={`modalContainer ${
+            isTimecodesModal && "modalContainer--open"
+          }`}
+        >
+          <div className="timecodesContainer">
+            <div onClick={handleCloseTimecodesModal}>Close</div>
+            {data[currentVideoTimecodesId].userTimeCodes.map((e) => (
+              <div>{e.time}</div>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -59,7 +106,7 @@ function returnMock() {
       duration: "1:07:23",
       posterUrl:
         "https://i.ytimg.com/vi/-E_PV61pN08/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLAavyV1kPygHuJNDJxyEA7RGksGQA",
-      userTimeCodes: [{ time: "5:25", commentary: null }],
+      userTimeCodes: [{ time: "325", commentary: null }],
       summary: [
         {
           content: "Беспилотники и их проблемы",
