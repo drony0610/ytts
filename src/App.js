@@ -2,7 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import { useState, useEffect } from "react";
 
-const tg = window.TelegramW.WebApp;
+const tg = window.Telegram.WebApp;
 
 function App() {
   const [data, setData] = useState(null);
