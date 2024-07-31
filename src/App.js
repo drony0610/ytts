@@ -3,24 +3,42 @@ import "./App.css";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import { fancyTimeFormat } from "./utils";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "./firebase";
 
 const tg = window.Telegram.WebApp;
+const mockStr =
+  "query_id=AAGlDuMWAAAAAKUO4xaLzSAa&user=%7B%22id%22%3A383979173%2C%22first_name%22%3A%22Andrew%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22akovalevv%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1722406034&hash=6842f6367ebd7dfd1c3be0590d964aa4ab939ffeec4757bede7944a01174234e";
 
-console.log(tg);
 function App() {
+  const parsedUrl = decodeURIComponent(tg.initData);
+  const objectFromParsed = JSON.parse(parsedUrl.match("(?!s*:s*)(?:{[^}]*})"));
+
+  const userId = objectFromParsed.id;
+
   const [data, setData] = useState(null);
   const [currentVideoTimecodesId, setCurrentVideoTimecodesId] = useState(0);
 
   const [isTimecodesModal, setIsTimecodesModal] = useState(false);
   const [isModal, setIsModal] = useState(false);
 
-  const nodeRef = useRef(null);
-
   useEffect(() => {
-    setData(returnMock());
+    const getDataFromFirestore = async () => {
+      try {
+        const ref = doc(db, "users", `${userId}`);
+        const docSnap = await getDoc(ref);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setData(data);
+        } else {
+          setData(null);
+        }
+      } catch (error) {
+        setData(null);
+      }
+    };
+    getDataFromFirestore();
   }, []);
-
-  console.log(isTimecodesModal);
 
   const handleOpenModal = (e, type = "timecodes") => {
     e.stopPropagation();
@@ -50,8 +68,6 @@ function App() {
           overflow: !isModal ? "auto" : "hidden",
         }}
       >
-        <p>debug {JSON.stringify(tg.initData)}</p>
-        <p>debug {JSON.stringify(tg.initDataUnsafe)}</p>
         <h1>Ваши сохраненные видео</h1>
         <div className="cards">
           {data.map(({ posterUrl, title, name, id }, i) => (
