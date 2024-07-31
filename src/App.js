@@ -14,21 +14,26 @@ function App() {
   const parsedUrl = decodeURIComponent(tg.initData);
   const objectFromParsed = JSON.parse(parsedUrl.match("(?!s*:s*)(?:{[^}]*})"));
 
-  const userId = objectFromParsed.id;
+  const userId = objectFromParsed?.id;
 
   const [data, setData] = useState(null);
   const [currentVideoTimecodesId, setCurrentVideoTimecodesId] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const [isTimecodesModal, setIsTimecodesModal] = useState(false);
   const [isModal, setIsModal] = useState(false);
 
+  console.log(data);
   useEffect(() => {
+    const loadingHandler = () => setLoading(false);
+    window.addEventListener("load", loadingHandler);
     const getDataFromFirestore = async () => {
+      setLoading(true);
       try {
         const ref = doc(db, "users", `${userId}`);
         const docSnap = await getDoc(ref);
         if (docSnap.exists()) {
-          const data = docSnap.data();
+          const { data } = docSnap.data();
           setData(data);
         } else {
           setData(null);
@@ -38,6 +43,9 @@ function App() {
       }
     };
     getDataFromFirestore();
+    return () => {
+      window.removeEventListener("load", loadingHandler);
+    };
   }, []);
 
   const handleOpenModal = (e, type = "timecodes") => {
@@ -55,8 +63,33 @@ function App() {
     setIsTimecodesModal((prev) => !prev);
   };
 
-  if (!data) {
-    return <div>Пусто...</div>;
+  if (loading) {
+    return (
+      <div className="App">
+        <div className="cards">
+          {Array.from(4)
+            .fill(1)
+            .map((e) => (
+              <div className="card-loading">
+                <div className="poster-loading"></div>
+                <div className="content-loading">
+                  <div className="titles">
+                    <h2 className="title-loading"></h2>
+                    <p className="sub_title-loading"></p>
+                  </div>
+                  <div className="buttons-loading">
+                    <div className="summaryBtn-loading"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (data?.length <= 0 || !data) {
+    return <div className="blocker">Пусто...</div>;
   }
 
   // Добавить лоадер
