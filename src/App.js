@@ -14,7 +14,7 @@ function App() {
   const parsedUrl = decodeURIComponent(tg.initData);
   const objectFromParsed = JSON.parse(parsedUrl.match("(?!s*:s*)(?:{[^}]*})"));
 
-  const userId = objectFromParsed?.id | 383979173;
+  const userId = objectFromParsed?.id;
 
   const [data, setData] = useState(null);
   const [currentVideoTimecodesId, setCurrentVideoTimecodesId] = useState(0);
