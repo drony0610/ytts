@@ -50,8 +50,8 @@ function App() {
           overflow: !isModal ? "auto" : "hidden",
         }}
       >
-        <p>debug {tg.initData}</p>
-        <p>debug {tg.initDataUnsafe}</p>
+        <p>debug {JSON.stringify(tg.initData)}</p>
+        <p>debug {JSON.stringify(tg.initDataUnsafe)}</p>
         <h1>Ваши сохраненные видео</h1>
         <div className="cards">
           {data.map(({ posterUrl, title, name, id }, i) => (
