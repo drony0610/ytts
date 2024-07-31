@@ -6,6 +6,7 @@ import { fancyTimeFormat } from "./utils";
 
 const tg = window.Telegram.WebApp;
 
+console.log(tg);
 function App() {
   const [data, setData] = useState(null);
   const [currentVideoTimecodesId, setCurrentVideoTimecodesId] = useState(0);
@@ -70,7 +71,9 @@ function App() {
                   </div>
                 </div>
               </div>
-              <div className="controls"></div>
+              <div className="controls">
+                <div></div>
+              </div>
             </div>
           ))}
         </div>
@@ -323,7 +326,6 @@ function SummaryList({ data }) {
     );
   }
 
-  console.log(refs);
   return (
     <div className="summaryList">
       {data.summary.map((sum, i) => (
@@ -336,11 +338,14 @@ function SummaryList({ data }) {
             <div
               className="summaryBtnAccodrdion"
               onClick={() => {
-                setOpenedSummaryId(i);
+                if (openedSummaryId === i) {
+                  return setOpenedSummaryId(null);
+                }
+                return setOpenedSummaryId(i);
               }}
             >
               <div></div>
-              <div className={`${openedSummaryId === i && "rotated"}`}></div>
+              <div className={`${openedSummaryId !== i && "rotated"}`}></div>
             </div>
           </div>
           <div

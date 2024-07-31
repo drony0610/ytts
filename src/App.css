@@ -14,6 +14,19 @@
   position: relative;
   height: 100vh;
 }
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgb(255, 255, 255);
+}
+
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
 .App h1{
   font-size: 1.5rem;
   margin-bottom: 16px;
@@ -37,8 +50,8 @@ a{
 }
 .poster{
   width: 100%;
-  max-width: 160px;
-  height: 150px;
+  max-width: 120px;
+  height: 100px;
   border-radius: 24px;
   overflow: clip;
 }
@@ -53,7 +66,7 @@ a{
 .content{
   display: flex;
   flex-direction: column;
-  padding: 16px 0;
+  gap:12px;
 }
 
 .titles{
@@ -95,7 +108,7 @@ a{
   cursor: pointer;
   text-align: center;
   width: 100%;
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
 
 .summaryBtn{
@@ -148,10 +161,12 @@ a{
   top:0;
   background:#fff;
   padding: 16px;
+  z-index: 10;
 }
 
 .modalContent{
   padding: 0 16px;
+  padding-bottom: 50px;
 }
 
 .toggler{
