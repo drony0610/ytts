@@ -25,10 +25,10 @@ function App() {
 
   console.log(data);
   useEffect(() => {
-    const loadingHandler = () => setLoading(false);
-    window.addEventListener("load", loadingHandler);
+    // const loadingHandler = () => setLoading(false);
+    // window.addEventListener("load", loadingHandler);
     const getDataFromFirestore = async () => {
-      setLoading(true);
+      // setLoading(true);
       try {
         const ref = doc(db, "users", `${userId}`);
         const docSnap = await getDoc(ref);
@@ -44,7 +44,7 @@ function App() {
     };
     getDataFromFirestore();
     return () => {
-      window.removeEventListener("load", loadingHandler);
+      // window.removeEventListener("load", loadingHandler);
     };
   }, []);
 
