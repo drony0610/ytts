@@ -14,7 +14,7 @@ function App() {
   const parsedUrl = decodeURIComponent(tg.initData);
   const objectFromParsed = JSON.parse(parsedUrl.match("(?!s*:s*)(?:{[^}]*})"));
 
-  const userId = objectFromParsed?.id;
+  const userId = objectFromParsed?.id | 383979173;
 
   const [data, setData] = useState(null);
   const [currentVideoTimecodesId, setCurrentVideoTimecodesId] = useState(0);
@@ -48,8 +48,10 @@ function App() {
     };
   }, []);
 
-  const handleOpenModal = (e, type = "timecodes") => {
+  const handleOpenModal = (e, index, type = "timecodes") => {
     e.stopPropagation();
+    setCurrentVideoTimecodesId(index);
+
     setIsModal(true);
   };
 
@@ -63,32 +65,30 @@ function App() {
     setIsTimecodesModal((prev) => !prev);
   };
 
-  if (loading) {
+  if (!data) {
     return (
       <div className="App">
         <div className="cards">
-          {Array.from(4)
-            .fill(1)
-            .map((e) => (
-              <div className="card-loading">
-                <div className="poster-loading"></div>
-                <div className="content-loading">
-                  <div className="titles">
-                    <h2 className="title-loading"></h2>
-                    <p className="sub_title-loading"></p>
-                  </div>
-                  <div className="buttons-loading">
-                    <div className="summaryBtn-loading"></div>
-                  </div>
+          {Array.from(Array(6).keys()).map((e) => (
+            <div className="card-loading">
+              <div className="poster-loading --pulsar"></div>
+              <div className="content-loading ">
+                <div className="titles">
+                  <h2 className="title-loading --pulsar"></h2>
+                  <p className="sub_title-loading --pulsar"></p>
+                </div>
+                <div className="buttons-loading">
+                  <div className="summaryBtn-loading --pulsar"></div>
                 </div>
               </div>
-            ))}
+            </div>
+          ))}
         </div>
       </div>
     );
   }
 
-  if (data?.length <= 0 || !data) {
+  if (data && data.length <= 0) {
     return <div className="blocker">Пусто...</div>;
   }
 
@@ -117,7 +117,10 @@ function App() {
                   <p className="sub_title">{name}</p>
                 </div>
                 <div className="buttons">
-                  <div className="summaryBtn" onClick={handleOpenModal}>
+                  <div
+                    className="summaryBtn"
+                    onClick={(e) => handleOpenModal(e, i)}
+                  >
                     Содержание и таймкоды
                   </div>
                 </div>
